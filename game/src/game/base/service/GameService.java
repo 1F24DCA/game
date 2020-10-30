@@ -3,6 +3,7 @@ package game.base.service;
 import java.lang.reflect.*;
 import java.util.*;
 
+import game.base.service.event.GameEvent;
 import game.base.value.*;
 
 // 게임 서비스 객체, 상속받을 시 "public class ConcreteGameService extends GameService<ConcreteGame> {...}"(으)로 상속받음
@@ -12,7 +13,7 @@ import game.base.value.*;
 // 또한, 게임 서비스를 구현한 클래스에서 해당 게임을 생성할 수 있도록 강제함
 // (이 추상 클래스에서 new G(); 를 이용한 생성은 불가능하므로, 구현하는 클래스에서 생성자를 맡김)
 // Generic을 사용하여 해당 게임 서비스와 연관된 게임 클래스를 형변환 없이 사용할 수 있도록 함
-public abstract class GameService<G extends Game<?>> extends Service {
+public abstract class GameService<G extends Game<?>, E extends GameEvent<G>> extends Service<E> {
 	// gameList: 클라이언트들의 모든 게임 정보들을 저장함
 	private List<G> gameList = new ArrayList<G>();
 	
@@ -46,7 +47,6 @@ public abstract class GameService<G extends Game<?>> extends Service {
 	}
 	
 	// createGameInstance(): 구현한 클래스에서 사용한 Generic Type을 이용해 해당 게임 객체를 생성하는 메서드
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	private final G createGameInstance(String gameId) {
 		// Service 객체에서 사용한 방법과 같으므로, 이부분의 설명은 생략함
 		ParameterizedType gameService = (ParameterizedType)this.getClass().getGenericSuperclass();
@@ -55,7 +55,8 @@ public abstract class GameService<G extends Game<?>> extends Service {
 		// 해당 게임 타입의 생성자 메서드를 받아와서 새 객체를 만들어서 G타입을 할당하고 return함
 		// 만약 생성자 메서드가 없거나, 모종의 이유로 문제가 발생했다면 런타임 예외를 던짐
 		try {
-			Constructor gameConstructor = ((Class)gameType).getConstructor(String.class);
+			@SuppressWarnings("unchecked")
+			Constructor<G> gameConstructor = ((Class<G>)gameType).getConstructor(String.class);
 			
 			return (G)(gameConstructor.newInstance(gameId));
 		} catch (Exception e) {
