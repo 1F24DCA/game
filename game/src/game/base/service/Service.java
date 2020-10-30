@@ -39,7 +39,7 @@ public abstract class Service<E extends Event> {
 	
 	// getActionEventClass() : Action의 Generic Type, 즉 Action과 연결된 이벤트의 클래스를 찾아냄
 	// Action과 연결된 이벤트는 액션마다 다르므로 이벤트를 호출하고자 할 때 이 Generic Type을 가져와야 함
-	private Class<? extends E> getActionEventClass(Action<? extends E> action) {
+	private final Class<? extends E> getActionEventClass(Action<? extends E> action) {
 		// Action을 상속받은 클래스에선 Generic Type을 찾기 힘드므로(ex. 익명클래스, Generic Type 미기재 등...) 부모 클래스의 타입을 받아옴
 		// 부모 클래스엔 Generic Type이 기재되어있지만, 기재된 Generic Type을 가져오려면 ParameterizedType 클래스로 형변환해야함!
 		ParameterizedType superClass = (ParameterizedType)action.getClass().getGenericSuperclass();
