@@ -15,7 +15,7 @@ import game.base.value.*;
 // Generic을 사용하여 해당 게임 서비스와 연관된 게임 클래스를 형변환 없이 사용할 수 있도록 함
 public abstract class GameService<G extends Game<?>, E extends GameEvent<G>> extends Service<E> {
 	// gameList: 클라이언트들의 모든 게임 정보들을 저장함
-	private List<G> gameList = new ArrayList<G>();
+	private List<G> gameList = Collections.synchronizedList(new ArrayList<G>());
 	
 	// hasGame(): 웹 등에서 동적인 로딩이 불가능한 경우, 처리를 하기 위해 현재 해당 게임이 진행 중인지 여부를 물음
 	public final boolean hasGame(String gameId) {

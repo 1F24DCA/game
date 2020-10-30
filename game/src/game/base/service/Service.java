@@ -11,7 +11,7 @@ import game.base.service.event.*;
 // 추상화된 이벤트(Event 인터페이스)와 이벤트가 발생했을 때 처리할 액션(Action 추상클래스)를 이용해 이벤트 처리를 보다 간편하게 하기 위한 메서드들을 제공함
 public abstract class Service<E extends Event> {
 	// 액션들을 List에 담아뒀다가 raiseEvent() 메서드 호출시 필요한 액션들을 perform하기 위해 모아둠
-	List<Action<? extends E>> actionList = new ArrayList<Action<? extends E>>();
+	List<Action<? extends E>> actionList = Collections.synchronizedList(new ArrayList<Action<? extends E>>());
 	
 	// addAction(): Generic Type으로 기재된 Event가 raiseEvent()로 실행되었을 때 Action을 실행하도록 서비스에 등록함
 	public final boolean addAction(Action<? extends E> actionToAdd) {
