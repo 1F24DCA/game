@@ -1,5 +1,7 @@
 package game.base.service.event;
 
+import game.base.common.Generator;
+
 // Generic Type에 기재된 이벤트(E)가 raise되었을 때 실행할 액션
 // Observer 패턴이 적용됨, Service에서 Action들을 관리하고 Event가 raise됬을 때 perform()메서드 일괄호출
 public abstract class Action<E extends Event> {
@@ -16,4 +18,10 @@ public abstract class Action<E extends Event> {
 	// 위의 사유때문에 perform() 메서드와 onPerform() 메서드를 나눔
 	// onPerform() 메서드는 Action을 상속받아서 작업하는 익명 클래스나, 등등의 클래스에서 Generic Type에 기재된 이벤트가 raise 시 실행할 액션을 오버라이드함
 	protected abstract boolean onPerform(E linkedEvent);
+	
+	// 액션을 구현한 클래스가 있다면 그 클래스의 정보를 반환함
+	@Override
+	public String toString() {
+		return Generator.generateToString(this);
+	}
 }
