@@ -6,9 +6,8 @@ import java.util.regex.*;
 
 public class Generator {
 	// 매개변수로 집어넣은 객체의 클래스명과 함께 멤버 변수의 값들을 출력해주는 메서드
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static String generateToString(Object objectToGenerateToString) {
-		Class objectClass = objectToGenerateToString.getClass();
+		Class<? extends Object> objectClass = objectToGenerateToString.getClass();
 		
 		String className = objectClass.getSimpleName();
 		String memberInfo = "";
@@ -56,12 +55,10 @@ public class Generator {
 	}
 	
 	// 조상 클래스들의 멤버 변수를 모두 가져오기 위해 메서드를 제작함
-	@SuppressWarnings("rawtypes")
-	private static List<Field> getDecalredFieldsWithSuperclasses(Class objectClass) {
+	private static List<Field> getDecalredFieldsWithSuperclasses(Class<? extends Object> objectClass) {
 		List<Field> classFields = new ArrayList<Field>();
 		
-		// 
-		Class superClass = objectClass.getSuperclass();
+		Class<? extends Object> superClass = objectClass.getSuperclass();
 		if (!superClass.equals(Object.class)) {
 			classFields.addAll(Generator.getDecalredFieldsWithSuperclasses(superClass));
 		}
